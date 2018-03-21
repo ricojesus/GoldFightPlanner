@@ -17,6 +17,7 @@
             </ul>
 
           <div class="box-body">
+            <!-- Tab Content-->
             <div class="tab-content">
 
               <div id="geral" class="tab-pane fade in active">
@@ -192,6 +193,8 @@
                 <p>Some content in menu 2.</p>
               </div>
             </div>
+            <!-- Tab Content-->
+
           </div>
 
         </div>
