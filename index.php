@@ -10,6 +10,8 @@ use \local\Model;
 use GoldFlightPlanner\page;
 use GoldFlightPlanner\Model\Aeroporto;
 use GoldFlightPlanner\Model\PlanoVFR;
+use GoldFlightPlanner\Model\Piloto;
+
 
 $config = [
     'settings' => [
@@ -32,9 +34,18 @@ $app->get('/', function () {
 });
 
 $app->get('/vfr', function () {
+	$piloto = new Piloto();
+	$origem = new Aeroporto();
+	$destino = new Aeroporto();
+	$alternativo = new Aeroporto();
 
 	$page = new Page();
-	$page->setTpl("PlanoVFR");
+	$page->setTpl("PlanoVFR", array(
+		"Origem" => $origem->getValues(),
+		"Destino" => $destino->getValues(),
+		"Alternativo" => $alternativo->getValues(),
+		"Piloto" => $piloto->getValues()
+	));
 
 });
 
@@ -42,38 +53,21 @@ $app->post('/vfr', function ($request, $response, $args) {
 	$origem = new Aeroporto();
 	$destino = new Aeroporto();
 	$alternativo = new Aeroporto();
+	$piloto = new Piloto();
 
 	$origem->get($_POST["Origem"]);
 	$destino->get($_POST["Destino"]);
 	$alternativo->get($_POST["Alternativo"]);
-
-
-	$org = array(
-		'Icao' => $origem->getIcao(), 
-		'Nome' => $origem->getNome(),
-		'Metar' => $origem->getMetar()
-	);
-
-	$dest = array(
-		'Icao' => $destino->getIcao(), 
-		'Nome' => $destino->getNome(),
-		'Metar' => $destino->getMetar()
-	);	
-
-	$alt = array(
-		'Icao' => $alternativo->getIcao(), 
-		'Nome' => $alternativo->getNome(),
-		'Metar' => $alternativo->getMetar()
-	);
-	//var_dump($org);
+	$piloto->get($_POST["CallSign"]);
 
 	$page = new Page();
-	$page->setTpl("index", array(
-		"Origem" => $org,
-		"Destino" => $dest,
-		"Alternativo" => $alt
+	$page->setTpl("PlanoVFR", array(
+		"Origem" => $origem->getValues(),
+		"Destino" => $destino->getValues(),
+		"Alternativo" => $alternativo->getValues(),
+		"Piloto" => $piloto->getValues()
 	));
-	
+
 });
 
 $app->run();
